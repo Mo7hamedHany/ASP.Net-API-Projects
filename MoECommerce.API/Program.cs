@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoECommerce.API.Errors;
 using MoECommerce.Core.Interfaces.Repositories;
 using MoECommerce.Core.Interfaces.Services;
 using MoECommerce.Repository.Data.Contexts;
@@ -31,6 +33,20 @@ namespace MoECommerce.API
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Where(model => model.Value.Errors.Any())
+                    .SelectMany(model => model.Value.Errors).Select(model => model.ErrorMessage).ToList();
+
+                    return new BadRequestObjectResult(new ApiValidationError()
+                    {
+                        Errors = errors
+                    });
+                };
+            });
+
             var app = builder.Build();
 
            await InitializeDbAsync(app);
@@ -50,6 +66,8 @@ namespace MoECommerce.API
 
 
             app.MapControllers();
+
+            app.UseMiddleware<CustomExceptionHandler>();
 
             app.Run();
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MoECommerce.API.Errors;
 using MoECommerce.Core.Interfaces.Services;
 using MoECommerce.Core.SpecificationParameters;
 
@@ -26,7 +27,9 @@ namespace MoECommerce.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetProduct(int? id)
         {
-            return Ok(await _productService.GetProductsAsync(id.Value));
+           // throw new Exception();
+            var product = await _productService.GetProductsAsync(id.Value);
+            return product is not null ? Ok(product) : NotFound(new ApiResponse(404));
         }
 
         [HttpGet("brands")]
