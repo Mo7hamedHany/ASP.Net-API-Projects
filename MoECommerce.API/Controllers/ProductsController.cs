@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoECommerce.API.Errors;
+using MoECommerce.API.Helper;
 using MoECommerce.Core.Interfaces.Services;
 using MoECommerce.Core.SpecificationParameters;
 
@@ -19,6 +20,7 @@ namespace MoECommerce.API.Controllers
         }
 
         [HttpGet]
+        [Cash(60)]
         public async Task<ActionResult> GetAllProducts([FromQuery]ProductSpecificationParameters parameters)
         {
             return Ok(await _productService.GetAllProductsAsync(parameters));

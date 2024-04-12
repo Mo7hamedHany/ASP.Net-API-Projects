@@ -7,6 +7,7 @@ using MoECommerce.Repository.Data.Contexts;
 using MoECommerce.Repository.Data.DataSeeding;
 using MoECommerce.Repository.Repositories;
 using MoECommerce.Services;
+using StackExchange.Redis;
 using System.Reflection;
 
 namespace MoECommerce.API
@@ -31,7 +32,20 @@ namespace MoECommerce.API
             
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+            builder.Services.AddScoped<IBasketService, BasketService>();
+
+            builder.Services.AddScoped<ICashService, CashService>();
+
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
+            {
+                var config = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("RedisConnection"));
+
+                return ConnectionMultiplexer.Connect(config);
+            });
 
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {
