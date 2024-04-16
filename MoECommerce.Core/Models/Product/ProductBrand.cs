@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoECommerce.Core.Models
+namespace MoECommerce.Core.Models.Product
 {
     public class ProductBrand : BaseModel<int>
     {

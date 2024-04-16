@@ -1,4 +1,4 @@
-﻿using MoECommerce.Core.Models;
+﻿using MoECommerce.Core.Models.Basket;
 using System;
 using System.Collections.Generic;
 using System.Linq;

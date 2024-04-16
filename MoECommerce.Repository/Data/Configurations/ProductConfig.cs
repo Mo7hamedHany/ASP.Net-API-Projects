@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;

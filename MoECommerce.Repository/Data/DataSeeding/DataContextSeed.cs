@@ -1,4 +1,4 @@
-﻿using MoECommerce.Core.Models;
+﻿using MoECommerce.Core.Models.Product;
 using MoECommerce.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;

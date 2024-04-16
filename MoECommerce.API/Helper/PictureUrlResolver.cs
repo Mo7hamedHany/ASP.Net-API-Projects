@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MoECommerce.Core.DataTransferObjects;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Product;
 
 namespace MoECommerce.API.Helper
 {

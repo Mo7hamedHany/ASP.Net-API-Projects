@@ -2,7 +2,7 @@
 using MoECommerce.Core.DataTransferObjects;
 using MoECommerce.Core.Interfaces.Repositories;
 using MoECommerce.Core.Interfaces.Services;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Basket;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Product;
 using MoECommerce.Core.Specification;
 using MoECommerce.Core.SpecificationParameters;
 using System;

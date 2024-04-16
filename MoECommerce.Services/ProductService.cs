@@ -2,7 +2,7 @@
 using MoECommerce.Core.DataTransferObjects;
 using MoECommerce.Core.Interfaces.Repositories;
 using MoECommerce.Core.Interfaces.Services;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Product;
 using MoECommerce.Core.SpecificationParameters;
 using MoECommerce.Repository.Specifications;
 using System;

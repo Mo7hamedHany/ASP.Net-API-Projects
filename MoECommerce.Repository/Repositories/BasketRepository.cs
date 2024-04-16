@@ -1,6 +1,6 @@
 ﻿
 using MoECommerce.Core.Interfaces.Repositories;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Basket;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;

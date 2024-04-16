@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoECommerce.API.Errors;
+using MoECommerce.API.Extensions;
 using MoECommerce.Core.Interfaces.Repositories;
 using MoECommerce.Core.Interfaces.Services;
+using MoECommerce.Core.Models.Identity;
 using MoECommerce.Repository.Data.Contexts;
 using MoECommerce.Repository.Data.DataSeeding;
 using MoECommerce.Repository.Repositories;
@@ -18,54 +21,17 @@ namespace MoECommerce.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddDbContext<DataContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection")));
-
-            builder.Services.AddControllers();
             
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
+            builder.Services.AddApplicationServices(builder.Configuration);
 
-            builder.Services.AddScoped<IProductService, ProductService>();
-            
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
-
-            builder.Services.AddScoped<IBasketService, BasketService>();
-
-            builder.Services.AddScoped<ICashService, CashService>();
-
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            builder.Services.AddSingleton<IConnectionMultiplexer>(options =>
-            {
-                var config = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("RedisConnection"));
-
-                return ConnectionMultiplexer.Connect(config);
-            });
-
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = context =>
-                {
-                    var errors = context.ModelState.Where(model => model.Value.Errors.Any())
-                    .SelectMany(model => model.Value.Errors).Select(model => model.ErrorMessage).ToList();
-
-                    return new BadRequestObjectResult(new ApiValidationError()
-                    {
-                        Errors = errors
-                    });
-                };
-            });
+            builder.Services.AddIdentityService();
 
             var app = builder.Build();
 
-           await InitializeDbAsync(app);
+           await DbInitializer.InitializeDbAsync(app);
 
-            // Configure the HTTP request pipeline.
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -86,34 +52,6 @@ namespace MoECommerce.API
             app.Run();
         }
 
-        private static async Task InitializeDbAsync(WebApplication app)
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var service = scope.ServiceProvider;
-
-                var loggerFactory = service.GetRequiredService<ILoggerFactory>();
-
-                try
-                {
-                    var context = service.GetRequiredService<DataContext>();
-
-                    if ((await context.Database.GetPendingMigrationsAsync()).Any())
-                    {
-                        await context.Database.MigrateAsync();
-                    }
-
-                    await DataContextSeed.SeedData(context);
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(ex.Message);
-                }
-            }
-        }
+       
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoECommerce.Core.Models;
+using MoECommerce.Core.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
