@@ -22,13 +22,15 @@ namespace MoECommerce.API.Extensions
            
            services.AddControllers();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+ 
             
             
             services.AddScoped<IProductService, ProductService>();
-            
+
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<ITokenService, TokenService>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             
             services.AddScoped<IBasketRepository, BasketRepository>();

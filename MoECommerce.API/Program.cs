@@ -25,7 +25,9 @@ namespace MoECommerce.API
 
             builder.Services.AddApplicationServices(builder.Configuration);
 
-            builder.Services.AddIdentityService();
+            builder.Services.AddIdentityService(builder.Configuration);
+
+            builder.Services.AddSwagerService();
 
             var app = builder.Build();
 
@@ -41,6 +43,8 @@ namespace MoECommerce.API
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

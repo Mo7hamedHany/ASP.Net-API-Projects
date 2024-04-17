@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MoECommerce.API.Errors;
 using MoECommerce.API.Helper;
@@ -19,6 +20,7 @@ namespace MoECommerce.API.Controllers
             _productService = productService;
         }
 
+        [Authorize]
         [HttpGet]
         [Cash(60)]
         public async Task<ActionResult> GetAllProducts([FromQuery]ProductSpecificationParameters parameters)
