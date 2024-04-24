@@ -14,7 +14,7 @@ namespace MoECommerce.Core.Interfaces.Services
 
         public Task<OrderResultDto> CreateOrderAsync(OrderDto input);
 
-        public Task<OrderResultDto> GetOrderAsync(string id, string email );
+        public Task<OrderResultDto> GetOrderAsync(Guid id, string email );
 
         public Task<IEnumerable<OrderResultDto>> GetAllOrdersAsync(string email);
     }
