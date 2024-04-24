@@ -1,4 +1,5 @@
-﻿using MoECommerce.Core.Models.Product;
+﻿using MoECommerce.Core.Models.Order;
+using MoECommerce.Core.Models.Product;
 using MoECommerce.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,20 @@ namespace MoECommerce.Repository.Data.DataSeeding
                 if (products != null && products.Any())
                 {
                     await context.Set<Product>().AddRangeAsync(products);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            if (!context.Set<DeliveryMethods>().Any())
+            {
+
+                var deliverData = await File.ReadAllTextAsync("../MoECommerce.Repository/Data/DataSeeding/delivery.json");
+
+                var deliveries = JsonSerializer.Deserialize<List<DeliveryMethods>>(deliverData);
+
+                if (deliveries != null && deliveries.Any())
+                {
+                    await context.Set<DeliveryMethods>().AddRangeAsync(deliveries);
                     await context.SaveChangesAsync();
                 }
             }

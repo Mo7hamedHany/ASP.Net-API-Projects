@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoECommerce.Core.Models.Order;
 using MoECommerce.Core.Models.Product;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ namespace MoECommerce.Repository.Data.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<DeliveryMethods> DeliveryMethods { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
