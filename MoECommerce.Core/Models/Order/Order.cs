@@ -24,6 +24,10 @@ namespace MoECommerce.Core.Models.Order
 
         public decimal SubTotal { get; set; }
 
+        public string? PaymentIntentId { get; set; }
+
+        public string? BasketId { get; set; }
+
         public decimal Total() => SubTotal + DeliveryMethod.Price;
     }
 }

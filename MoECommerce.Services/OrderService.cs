@@ -18,12 +18,14 @@ namespace MoECommerce.Services
         private readonly IBasketService _basketService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IPaymentService _paymentService;
 
-        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, IMapper mapper)
+        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, IMapper mapper, IPaymentService paymentService)
         {
             _basketService = basketService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _paymentService = paymentService;
         }
 
         public async Task<OrderResultDto> CreateOrderAsync(OrderDto input)
@@ -62,6 +64,19 @@ namespace MoECommerce.Services
 
             var shippingAddress = _mapper.Map<ShippingAddress>(input.ShippingAddress);
 
+            var spec = new OrderWithPaymentIntentIdSpecification(basket.PaymentIntentId);
+            var existingOrder = await _unitOfWork.Repository<Order, Guid>().GetWithSpecsAsync(spec);
+
+            if (existingOrder is not null)
+            {
+                _unitOfWork.Repository<Order, Guid>().Delete(existingOrder);
+                await _paymentService.CreateOrUpdatePaymentIntentForExistingOrder(basket);
+            }
+            else
+            {
+                await _paymentService.CreateOrUpdatePaymentIntentForNewOrder(basket.Id);
+            }
+
             var subTotal = orderItems.Sum(item => item.Price * item.Quantity);
 
             var mappedItems = _mapper.Map<IEnumerable<OrderItem>>(orderItems);
@@ -76,6 +91,7 @@ namespace MoECommerce.Services
             };
 
             await _unitOfWork.Repository<Order,Guid>().AddAsunc(order);
+            await _unitOfWork.CompleteAsync();
 
             return _mapper.Map<OrderResultDto>(order);
         }
@@ -85,6 +101,7 @@ namespace MoECommerce.Services
             var spec = new OrderSpecifications(email);
 
             var orders = await _unitOfWork.Repository<Order, Guid>().GetAllWithSpecsAsync(spec);
+            if (!orders.Any()) throw new Exception($"There're no orders yet for this email: {email}");
 
             return _mapper.Map<IEnumerable<OrderResultDto>>(orders);
         }
@@ -93,9 +110,10 @@ namespace MoECommerce.Services
         {
             var spec = new OrderSpecifications(id,email);
 
-            var orders = await _unitOfWork.Repository<Order, Guid>().GetWithSpecsAsync(spec);
+            var order = await _unitOfWork.Repository<Order, Guid>().GetWithSpecsAsync(spec);
+            if (order == null) throw new Exception($"No order with id: {id}");
 
-            return _mapper.Map<OrderResultDto>(orders);
+            return _mapper.Map<OrderResultDto>(order);
         }
 
         public async Task<IEnumerable<DeliveryMethods>> GetDeliveryMethodsAsync()

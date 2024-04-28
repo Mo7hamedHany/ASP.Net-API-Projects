@@ -28,5 +28,9 @@ namespace MoECommerce.Core.DataTransferObjects
         public decimal ShippingPrice { get; set; }
 
         public decimal Total { get; set; }
+
+        public string? PaymentIntentId { get; set; }
+
+        public string? BasketId { get; set; }
     }
 }

@@ -22,9 +22,7 @@ namespace MoECommerce.API.Extensions
            
            services.AddControllers();
 
- 
-            
-            
+
             services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IUserService, UserService>();
@@ -38,6 +36,10 @@ namespace MoECommerce.API.Extensions
             services.AddScoped<IBasketService, BasketService>();
             
             services.AddScoped<ICashService, CashService>();
+
+            services.AddScoped<IPaymentService, PaymentService>();
+
+            services.AddScoped<IOrderService,  OrderService>();
             
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             

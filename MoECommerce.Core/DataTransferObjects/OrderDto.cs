@@ -16,5 +16,7 @@ namespace MoECommerce.Core.DataTransferObjects
         public int? DeliveryMethodId { get; set; }
 
         public ShippingAddressDto ShippingAddress { get; set; }
+
+
     }
 }

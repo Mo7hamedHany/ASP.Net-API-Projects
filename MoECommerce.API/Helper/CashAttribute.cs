@@ -37,7 +37,7 @@ namespace MoECommerce.API.Helper
 
             if (excutedContext.Result is OkObjectResult response) 
             {
-                await _cashService.SetCashResponceAsync(cashKey, response.Value,TimeSpan.FromSeconds(_time));
+                await _cashService.SetCashResponceAsync(cashKey, response.Value,TimeSpan.FromMinutes(_time));
             }
         }
 

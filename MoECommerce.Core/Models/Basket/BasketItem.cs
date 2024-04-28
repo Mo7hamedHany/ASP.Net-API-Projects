@@ -8,7 +8,7 @@ namespace MoECommerce.Core.Models.Basket
 {
     public class BasketItem
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
 
         public string ProductName { get; set; }
 
